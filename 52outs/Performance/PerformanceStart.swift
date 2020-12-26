@@ -150,7 +150,6 @@ class PerformanceStart: UIViewController, UIGestureRecognizerDelegate{
                 view.removeFromSuperview()
                 }
             }
-            //ClearRecognizers(except: recognizer.view)
             self.view.addSubview(satHalf)
             self.view.addSubview(rotHalf)
             hasBegun = true
