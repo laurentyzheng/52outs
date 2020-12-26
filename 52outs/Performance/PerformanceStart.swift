@@ -108,13 +108,10 @@ class PerformanceStart: UIViewController, UIGestureRecognizerDelegate{
                 self.animator.startAnimation()
                 self.animator.pauseAnimation()
             case .changed:
-                if val < 4{self.animator.fractionComplete = recognizer.translation(in: rotCorner).x / 300
+                if val < 4{
+                    self.animator.fractionComplete = recognizer.translation(in: rotCorner).x / 300
                 } else {
-                    if val % 2 == 0 {
-                        self.animator.fractionComplete = recognizer.translation(in: rotCorner).y / -440
-                    } else {
-                        self.animator.fractionComplete = recognizer.translation(in: rotCorner).y / -440
-                    }
+                    self.animator.fractionComplete = recognizer.translation(in: rotCorner).y / -440
                 }
             case .ended:
                 if self.animator.fractionComplete < 0.5 {
@@ -153,7 +150,7 @@ class PerformanceStart: UIViewController, UIGestureRecognizerDelegate{
                 view.removeFromSuperview()
                 }
             }
-            ClearRecognizers(except: recognizer.view)
+            //ClearRecognizers(except: recognizer.view)
             self.view.addSubview(satHalf)
             self.view.addSubview(rotHalf)
             hasBegun = true

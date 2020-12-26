@@ -23,6 +23,10 @@ class PerformanceReady: UIViewController {
         SetUpBackground()
     }
     
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
     private func SetUpBackground (){
         if Settings.defaults.bool(forKey: "defaultBlackScreen"){
             self.view.backgroundColor = .black
