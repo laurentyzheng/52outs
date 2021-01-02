@@ -30,7 +30,7 @@ class Settings: UIViewController {
     
     private var redButton: UIButton = {
         let button = UIButton.init(type: .roundedRect)
-        button.frame = CGRect(x: vc.ScreenHalfW()*0.4 - 10, y: vc.ScreenHalfW() * 1.4 + 40, width: vc.ScreenHalfW()*0.6, height: vc.ScreenHalfW()*0.25)
+        button.frame = CGRect(x: vc.ScreenHalfW()*0.4 - 10, y: vc.ScreenHalfW() * 1.4, width: vc.ScreenHalfW()*0.6, height: vc.ScreenHalfW()*0.25)
         button.backgroundColor = .red
         button.layer.cornerRadius = 22
         button.addTarget(self, action: #selector(handleRedBtn(_:)), for: .touchDown)
@@ -38,7 +38,7 @@ class Settings: UIViewController {
     } ()
     private var blueButton: UIButton = {
         let button = UIButton.init(type: .roundedRect)
-        button.frame = CGRect(x: vc.ScreenHalfW() + 10, y: vc.ScreenHalfW() * 1.4 + 40, width: vc.ScreenHalfW()*0.6, height: vc.ScreenHalfW()*0.25)
+        button.frame = CGRect(x: vc.ScreenHalfW() + 10, y: vc.ScreenHalfW() * 1.4, width: vc.ScreenHalfW()*0.6, height: vc.ScreenHalfW()*0.25)
         button.backgroundColor = .blue
         button.layer.cornerRadius = 22
         button.addTarget(self, action: #selector(handleBlueBtn(_:)), for: .touchDown)
@@ -47,7 +47,7 @@ class Settings: UIViewController {
     
     private var cardView: UIImageView = {
         let view = UIImageView()
-        let width = vc.ScreenHalfW() * 0.9
+        let width = vc.ScreenHalfW() * 0.8
         let height = width * 1.4
         view.frame = CGRect (x: vc.ScreenHalfW() - width/2, y: 30, width: width, height: height)
         return view
@@ -230,6 +230,7 @@ extension Settings: UITableViewDelegate, UITableViewDataSource {
                 cell.addSubview(cardView)
                 cell.addSubview(redButton)
                 cell.addSubview(blueButton)
+                cell.selectionStyle = .none
             }
         default:
             break
