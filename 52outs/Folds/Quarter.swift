@@ -74,12 +74,10 @@ public class Quarter {
             stationary.frame = CGRect(x:vc.ScreenHalfW() - w, y:vc.ScreenHalfH(), width:w, height: h)
             stationary.layer.transform = CATransform3DMakeRotation( .pi, 0, 1, 0)
             rotating.layer.transform = CATransform3DMakeRotation( .pi, 1, 0, 0)
-        } else if val == 7 {
+        } else {
             rotating.frame = CGRect(x:vc.ScreenHalfW(), y:vc.ScreenHalfH() - h, width:w, height: h)
             stationary.frame = CGRect(x:vc.ScreenHalfW(), y:vc.ScreenHalfH(), width:w, height: h)
             rotating.layer.transform = CATransform3DMakeRotation( .pi, 1, 0, 0)
-        } else {
-            print("val not right")
         }
     }
 }

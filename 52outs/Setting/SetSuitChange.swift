@@ -5,7 +5,6 @@
 //  Created by Laurent Zheng on 2020-10-25.
 //  Copyright © 2020 Laurent Zheng. All rights reserved.
 //
-
 import UIKit
 
 class SetSuitChange: UIViewController{
@@ -14,8 +13,8 @@ class SetSuitChange: UIViewController{
     private var SuitSwitchView: UISwitch = UISwitch(frame: .zero)
     private var VibrateSwitchView: UISwitch = UISwitch(frame: .zero)
     private var DurationSliderView: UISlider = UISlider(frame: CGRect(x: vc.ScreenHalfW() * 0.15, y:vc.ScreenHalfH() * 0.05, width: vc.ScreenHalfW()*1.7, height: 20))
-    private var SectionView = UILabel (frame: CGRect(x: vc.ScreenHalfH() * 0.1, y: -25, width: 280, height: 40))
-    private var DurationSecView = UILabel (frame: CGRect(x: vc.ScreenHalfH() * 0.7, y: -25, width: 60, height: 40))
+    private var SectionView = UILabel (frame: CGRect(x: vc.ScreenHalfH() * 0.1, y: -40, width: 280, height: 40))
+    private var DurationSecView = UILabel (frame: CGRect(x: vc.ScreenHalfH() * 0.7, y: -40, width: 60, height: 40))
     
     private let SuitFrame = UIView (frame: CGRect(x: vc.ScreenHalfW() * 0.25, y: vc.ScreenHalfH() * 0.15, width: vc.ScreenHalfW() * 1.5, height: vc.ScreenHalfW() * 1.5))
     private var UpperLeftFrame = UIImageView(image: #imageLiteral(resourceName: "UpperLeft Frame"))

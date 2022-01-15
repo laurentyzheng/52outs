@@ -9,19 +9,25 @@
 import UIKit
 import SpriteKit
 
+/**
+ View Controller of Home Page
+ - Sets all buttons  and  button objc functions
+ */
+
+
 class ViewController: UIViewController {
     
     public func ScreenHalfW() -> CGFloat{
         return (self.view.safeAreaLayoutGuide.layoutFrame.size.width)/2
-    } // returns (width of screen)/2
+    } // (width of screen)/2
     public func ScreenHalfH() -> CGFloat {
         return (self.view.safeAreaLayoutGuide.layoutFrame.size.height)/2
-    }// returns (height of screen)/2
+    }// (height of screen)/2
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setBackGround()
-        buttonSet()
+        setButton()
         // background for the first page
     }
     
@@ -37,6 +43,17 @@ class ViewController: UIViewController {
         let w = ScreenHalfW() * 2
         front.frame =  CGRect(x: ScreenHalfW() - w/2, y: ScreenHalfH() - w/1.5, width: w, height: w)
         self.view.addSubview(front)
+    }
+    
+    private func setButton (){
+        let w = ScreenHalfW()
+        let h = w/3
+        launchButton.frame = CGRect (x: ScreenHalfW() - w/2, y: ScreenHalfH() * 1.4, width: w, height: h)
+        secretButton.frame = CGRect (x: ScreenHalfW() - w/2, y: ScreenHalfH() * 1.4 + h + 15, width: w, height: h)
+        settingsButton.frame = CGRect (x: ScreenHalfW()/5, y: ScreenHalfH()/7.5, width: ScreenHalfW()/4, height: ScreenHalfW()/4)
+        self.view.addSubview(settingsButton)
+        self.view.addSubview(launchButton)
+        self.view.addSubview(secretButton)
     }
     
     private let settingsButton: UIButton = {
@@ -69,22 +86,9 @@ class ViewController: UIViewController {
         return button
     } ()
     
-    private func buttonSet (){
-        let w = ScreenHalfW()
-        let h = w/3
-        launchButton.frame = CGRect (x: ScreenHalfW() - w/2, y: ScreenHalfH() * 1.4, width: w, height: h)
-        secretButton.frame = CGRect (x: ScreenHalfW() - w/2, y: ScreenHalfH() * 1.4 + h + 15, width: w, height: h)
-        settingsButton.frame = CGRect (x: ScreenHalfW()/5, y: ScreenHalfH()/7.5, width: ScreenHalfW()/4, height: ScreenHalfW()/4)
-        self.view.addSubview(settingsButton)
-        self.view.addSubview(launchButton)
-        self.view.addSubview(secretButton)
-    }
-    
     @objc private func PressedSecret (_: UIButton){
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        
-        
         let nextView = SwipingController(collectionViewLayout: layout)
         nextView.modalTransitionStyle = .coverVertical
         nextView.modalPresentationStyle = .fullScreen
