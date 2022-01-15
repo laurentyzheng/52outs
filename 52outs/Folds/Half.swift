@@ -8,14 +8,19 @@
 
 import UIKit
 
+/**
+  Halved card after the first unfold
+ */
 public class Half {
     var stationary: UIImageView = UIImageView ()
     var rotating: UIImageView = UIImageView ()
     init(_ orientation: String, front: UIImage, valOfturn: Int, color: String) {
+        //Class Objects
         var TopBack: UIImage!
         var BotBack: UIImage!
         var LeftBack: UIImage!
         var RightBack: UIImage!
+        
         if color == "Red"{
             TopBack =  UIImage(named: "TopHalf")
             BotBack = UIImage(named: "BotHalf")

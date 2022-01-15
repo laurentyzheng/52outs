@@ -12,57 +12,26 @@ import AudioToolbox
 
 var FoldedCard = SKSpriteNode()
 
+// scene for card surface animation
 class PerformCardTrick: SKScene, SKPhysicsContactDelegate{
-    
+
+    // MARK: - Local Nodes
+    // walls
     let Bot = SKSpriteNode()
     let Top = SKSpriteNode()
     let Left = SKSpriteNode()
     let Right = SKSpriteNode()
     
+    //background
     let bckg = SKSpriteNode()
     
+    //gather data from settings default
     var suitArray: [String] = Settings.defaults.object(forKey: "suitArrangement") as? [String] ?? [String]()
     
-    let motionManager = CMMotionManager()
+   // MARK: - Scene interations
     
-    var physicalW: Float = 200
-    var FoldedCardW: CGFloat{
-        return CGFloat(physicalW)
-    }
-    var FoldedCardH: CGFloat{
-        return FoldedCardW * 1.39
-    }
-    
-    
-    
-    final var TopRight: CGPoint{
-        return CGPoint(x: vc.ScreenHalfW()*2 - FoldedCardW/2, y: vc.ScreenHalfH()*2 - FoldedCardH/2 )
-    }
-    final var TopLeft: CGPoint{
-        return CGPoint(x: FoldedCardW/2, y: vc.ScreenHalfH()*2 - FoldedCardH/2 )
-    }
-    final var BotRight: CGPoint{
-        return CGPoint(x: vc.ScreenHalfW()*2 - FoldedCardW/2, y: FoldedCardH/2)
-    }
-    final var BotLeft: CGPoint{
-        return CGPoint(x: FoldedCardW/2, y: FoldedCardH/2)
-    }
-    
-    var touched: Bool = false
-    var stopUserMotion: Bool = false
-    
-    func endRoutine () {
-        FullCard.removeFromParent()
-        self.removeFromParent()
-        self.view?.window?.rootViewController = PerformanceReady ()
-        self.view?.window?.rootViewController?.dismiss(animated: true, completion: nil)
-        Card.value = 0
-        Card.suit = ""
-        if Settings.defaults.bool(forKey: "exitWhenFinish"){
-            exit(69)
-        }
-    }
-    
+    private let motionManager = CMMotionManager()
+    //init
     override func didMove(to view: SKView){
         super.didMove(to: view)
         AddWalls()
@@ -80,6 +49,9 @@ class PerformCardTrick: SKScene, SKPhysicsContactDelegate{
         }
     }
     
+    ///touch defintions
+    var touched: Bool = false
+    var stopUserMotion: Bool = false
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
@@ -88,7 +60,11 @@ class PerformCardTrick: SKScene, SKPhysicsContactDelegate{
             let y = vc.ScreenHalfH()*2 - location.y
             let touchLocation = CGPoint(x: x, y: y)
             if FullCard.contains(touchLocation){
-                if touchLocation.y > vc.ScreenHalfH()*2 - 10 || touchLocation.y < 10 || touchLocation.x < 10 || touchLocation.x > vc.ScreenHalfW()*2 - 10 {
+                if touchLocation.y > vc.ScreenHalfH()*2 - 10 ||
+                    touchLocation.y < 10 ||
+                    touchLocation.x < 10 ||
+                    touchLocation.x > vc.ScreenHalfW()*2 - 10
+                {
                     endRoutine()
                 } else {
                     AddWalls()
@@ -100,7 +76,6 @@ class PerformCardTrick: SKScene, SKPhysicsContactDelegate{
         stopUserMotion = false
     }
 
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         guard let touch = touches.first else {
@@ -150,8 +125,22 @@ class PerformCardTrick: SKScene, SKPhysicsContactDelegate{
         
     }
     
-    var previousLocation = CGPoint()
+    override func update(_ currentTime: TimeInterval) {
+        if !(intersects(FullCard)) && self.contains(FullCard) {
+            endRoutine()
+        }
+        processUserMotion(forUpdate: currentTime, node: FoldedCard)
+        if FullCardReady{
+            processUserMotion(forUpdate: currentTime, node: FullCard)
+        }
+        if Settings.defaults.bool(forKey:"allowChangeSuit"){
+            ChangeSuit()
+        }
+        FoldedCard.physicsBody?.isDynamic = !touched
+        FullCard.physicsBody?.isDynamic = !stopUserMotion
+    }
     
+    var previousLocation = CGPoint()
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
@@ -173,24 +162,9 @@ class PerformCardTrick: SKScene, SKPhysicsContactDelegate{
             }
         }
     }
-
     
-    override func  update(_ currentTime: TimeInterval) {
-        if !(intersects(FullCard)) && self.contains(FullCard) {
-            endRoutine()
-        }
-        processUserMotion(forUpdate: currentTime, node: FoldedCard)
-        if FullCardReady{
-            processUserMotion(forUpdate: currentTime, node: FullCard)
-        }
-        if Settings.defaults.bool(forKey:"allowChangeSuit"){
-            ChangeSuit()
-        }
-        FoldedCard.physicsBody?.isDynamic = !touched
-        FullCard.physicsBody?.isDynamic = !stopUserMotion
-    }
-    
-    func setBackground () {
+    // MARK: - Helper Functions for initial set up
+    private func setBackground () {
         if Settings.defaults.bool(forKey: "defaultBlackScreen"){
             self.backgroundColor = .black
         } else {
@@ -220,17 +194,6 @@ class PerformCardTrick: SKScene, SKPhysicsContactDelegate{
         addChild(FoldedCard)
     }
     
-    func processUserMotion(forUpdate currentTime: CFTimeInterval, node: SKSpriteNode) {
-        if let data = motionManager.accelerometerData {
-            if (fabs(data.acceleration.x) > 0.1) {
-                node.physicsBody!.applyForce(CGVector(dx: 80.0 * CGFloat(data.acceleration.x), dy: 0))
-            }
-            if (fabs(data.acceleration.y) > 0.1) {
-                node.physicsBody!.applyForce(CGVector(dx: 0, dy: 80.0 * CGFloat(data.acceleration.y)))
-            }
-        }
-    }
-    
     func AddWalls() {
         Bot.physicsBody = SKPhysicsBody(rectangleOf: CGSize (width: vc.ScreenHalfW()*2, height: 1), center: CGPoint(x:vc.ScreenHalfW(), y:0))
         Bot.physicsBody?.isDynamic = false
@@ -246,29 +209,25 @@ class PerformCardTrick: SKScene, SKPhysicsContactDelegate{
         addChild(Right)
     }
     
+    // MARK: - Helper functions and variables for motion and suit change logic
+    private func processUserMotion(forUpdate currentTime: CFTimeInterval, node: SKSpriteNode) {
+        if let data = motionManager.accelerometerData {
+            if (fabs(data.acceleration.x) > 0.1) {
+                node.physicsBody!.applyForce(CGVector(dx: 80.0 * CGFloat(data.acceleration.x), dy: 0))
+            }
+            if (fabs(data.acceleration.y) > 0.1) {
+                node.physicsBody!.applyForce(CGVector(dx: 0, dy: 80.0 * CGFloat(data.acceleration.y)))
+            }
+        }
+    }
+    
     var suitChangedTo: [Bool] = [false, false, false, false]
-    
-    final var isAtTopLeft: Bool {
-        return abs(FoldedCard.position.x - TopLeft.x) < 1 && abs(FoldedCard.position.y - TopLeft.y) < 1
-    }
-    
-    final var isAtTopRignt: Bool {
-        return abs(FoldedCard.position.x - TopRight.x) < 1 &&  abs(FoldedCard.position.y - TopRight.y) < 1
-    }
-    
-    final var isAtBotLeft: Bool {
-        return abs(FoldedCard.position.x - BotLeft.x) < 1 &&  abs(FoldedCard.position.y - BotLeft.y) < 1
-    }
-    
-    final var isAtBotRight: Bool {
-        return abs(FoldedCard.position.x - BotRight.x) < 1 && abs(FoldedCard.position.y - BotRight.y) < 1
-    }
-    
+ 
     var CornersArr: [CGPoint] {
         return [TopLeft, TopRight, BotLeft, BotRight]
     }
     
-    func ChangeSuit() {
+    private func ChangeSuit() {
         if !(isAtTopLeft || isAtTopRignt || isAtBotLeft || isAtBotRight) {
             self.removeAllActions()
             for n in 0...3 {self.suitChangedTo[n] = false}
@@ -284,7 +243,7 @@ class PerformCardTrick: SKScene, SKPhysicsContactDelegate{
         }
     }
     
-    func changeSuitModel (_ num: Int){
+    private func changeSuitModel (_ num: Int){
         self.suitChangedTo[num] = true
         let wait = SKAction.wait(forDuration: Settings.defaults.double(forKey:"durationOfChangeSuit"))
         self.run(wait, completion: {
@@ -298,5 +257,16 @@ class PerformCardTrick: SKScene, SKPhysicsContactDelegate{
         })
     }
     
-    
+    private func endRoutine () {
+        FullCard.removeFromParent()
+        self.removeFromParent()
+        self.view?.window?.rootViewController = PerformanceReady ()
+        self.view?.window?.rootViewController?.dismiss(animated: true, completion: nil)
+        Card.value = 0
+        Card.suit = ""
+        if Settings.defaults.bool(forKey: "exitWhenFinish"){
+            exit(69)
+        }
+    }
+      
 }

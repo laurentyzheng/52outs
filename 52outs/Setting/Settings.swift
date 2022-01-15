@@ -13,9 +13,10 @@ public let tableColor = UIColor(red: 30/255, green: 30/255, blue: 40/255, alpha:
 let vc = ViewController()
 
 class Settings: UIViewController {
-    
+   
     public static var defaults = UserDefaults.standard
     
+    //MARK: - Local object declaration
     private var launchSwitch: UISwitch = {
         let Switch = UISwitch(frame: .zero)
         Switch.addTarget(self, action: #selector(handleLaunchSwitch(mySwitch:)), for: .valueChanged)
@@ -30,7 +31,7 @@ class Settings: UIViewController {
     
     private var redButton: UIButton = {
         let button = UIButton.init(type: .roundedRect)
-        button.frame = CGRect(x: vc.ScreenHalfW()*0.4 - 10, y: vc.ScreenHalfW() * 1.4 + 40, width: vc.ScreenHalfW()*0.6, height: vc.ScreenHalfW()*0.25)
+        button.frame = CGRect(x: vc.ScreenHalfW()*0.4 - 10, y: vc.ScreenHalfW() * 1.4, width: vc.ScreenHalfW()*0.6, height: vc.ScreenHalfW()*0.25)
         button.backgroundColor = .red
         button.layer.cornerRadius = 22
         button.addTarget(self, action: #selector(handleRedBtn(_:)), for: .touchDown)
@@ -38,7 +39,7 @@ class Settings: UIViewController {
     } ()
     private var blueButton: UIButton = {
         let button = UIButton.init(type: .roundedRect)
-        button.frame = CGRect(x: vc.ScreenHalfW() + 10, y: vc.ScreenHalfW() * 1.4 + 40, width: vc.ScreenHalfW()*0.6, height: vc.ScreenHalfW()*0.25)
+        button.frame = CGRect(x: vc.ScreenHalfW() + 10, y: vc.ScreenHalfW() * 1.4, width: vc.ScreenHalfW()*0.6, height: vc.ScreenHalfW()*0.25)
         button.backgroundColor = .blue
         button.layer.cornerRadius = 22
         button.addTarget(self, action: #selector(handleBlueBtn(_:)), for: .touchDown)
@@ -47,12 +48,11 @@ class Settings: UIViewController {
     
     private var cardView: UIImageView = {
         let view = UIImageView()
-        let width = vc.ScreenHalfW() * 0.9
+        let width = vc.ScreenHalfW() * 0.8
         let height = width * 1.4
         view.frame = CGRect (x: vc.ScreenHalfW() - width/2, y: 30, width: width, height: height)
         return view
     }()
-    // MARK: - Properties
     
     private var tableView: UITableView {
         let table = UITableView()
@@ -69,25 +69,6 @@ class Settings: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(tableView)
-        addBar()
-    }
-    
-    @objc func handleClosed () {
-     self.dismiss(animated: true, completion: nil)
-    }
-    
-    @objc func handleBackToDefault () {
-        let alert = UIAlertController(title: "Reset", message: "Do you want to reset all settings back to default?", preferredStyle: .alert)
-
-        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { action in
-            self.setAllToDefault()
-        }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        self.present(alert, animated: true)
-    }
-    // MARK: - Helper Functions
-    
-    private func addBar() {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.isTranslucent = false
         navigationController?.navigationBar.barStyle = .black
@@ -137,6 +118,8 @@ class Settings: UIViewController {
         Settings.defaults.set("false", forKey: "exitWhenFinish")
         statusChange()
     }
+    
+    // MARK: - Object Logic
         
     @objc func handleRedBtn (_: UIButton) {
         Settings.defaults.set("Red", forKey: "cardColour")
@@ -148,6 +131,22 @@ class Settings: UIViewController {
         Settings.defaults.set("Blue", forKey: "cardColour")
         setToBlue()
     }
+    
+    @objc func handleClosed () {
+     self.dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func handleBackToDefault () {
+        let alert = UIAlertController(title: "Reset", message: "Do you want to reset all settings back to default?", preferredStyle: .alert)
+
+        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { action in
+            self.setAllToDefault()
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        self.present(alert, animated: true)
+    }
+    
+    // MARK: - Helper Functions
     
     private func setToRed () {
         cardView.image = #imageLiteral(resourceName: "FoldedCard")
@@ -172,10 +171,11 @@ class Settings: UIViewController {
 
 extension Settings: UITableViewDelegate, UITableViewDataSource {
     
+    // MARK: - Table Definition
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return SettingsSection.allCases.count
     }
-    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
@@ -230,6 +230,7 @@ extension Settings: UITableViewDelegate, UITableViewDataSource {
                 cell.addSubview(cardView)
                 cell.addSubview(redButton)
                 cell.addSubview(blueButton)
+                cell.selectionStyle = .none
             }
         default:
             break
@@ -237,14 +238,6 @@ extension Settings: UITableViewDelegate, UITableViewDataSource {
         cell.textLabel?.textColor = .white
         cell.backgroundColor = tableColor
         return cell
-    }
-    
-    @objc func handleExitSwitch (mySwitch: UISwitch){
-        Settings.defaults.set(mySwitch.isOn, forKey: "exitWhenFinish")
-    }
-    
-    @objc func handleLaunchSwitch (mySwitch: UISwitch){
-        Settings.defaults.set(mySwitch.isOn, forKey: "startOnLaunch")
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -263,6 +256,16 @@ extension Settings: UITableViewDelegate, UITableViewDataSource {
         if let index = tableView.indexPathForSelectedRow{
             tableView.deselectRow(at: index, animated: true)
         }
+    }
+    
+    // MARK: - Object Logic
+    
+    @objc func handleExitSwitch (mySwitch: UISwitch){
+        Settings.defaults.set(mySwitch.isOn, forKey: "exitWhenFinish")
+    }
+    
+    @objc func handleLaunchSwitch (mySwitch: UISwitch){
+        Settings.defaults.set(mySwitch.isOn, forKey: "startOnLaunch")
     }
     
 }

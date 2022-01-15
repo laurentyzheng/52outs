@@ -40,6 +40,8 @@ class PerformanceReady: UIViewController {
         }
     }
     
+    
+     // MARK: - Buttons Declaration
     private let UpperLeft: UIButton = {
         let button = UIButton (frame: CGRect(x: 0, y: 0, width: vc.ScreenHalfW(), height: vc.ScreenHalfH()))
         button.addTarget(self,action: #selector(handleUpperLeft), for: .touchUpInside)
@@ -68,6 +70,8 @@ class PerformanceReady: UIViewController {
         return button
     }()
     
+    
+    //MARK: - Object Declaration: Card Appears for any button, the value of the suit is stored for the later usage.
     @objc func handleUpperLeft() {
         let nextView = PerformanceStart()
         nextView.modalPresentationStyle = .fullScreen
@@ -87,9 +91,9 @@ class PerformanceReady: UIViewController {
         let nextView = PerformanceStart()
         nextView.modalPresentationStyle = .fullScreen
         self.present(nextView, animated: false, completion: {Card.suit = self.suitArray[3]})
-    }// Card Appears for any button, the value of the suit is stored for the later usage.
-    
-    
+    }
+      
+    //exit performance screen when pinched
     @objc private func ExitingPerfomance( sender: UIPanGestureRecognizer) {
         if sender.numberOfTouches > 1 && sender.velocity(in: self.view).y > 0{
             if Settings.defaults.bool(forKey: "startOnLaunch"){
@@ -101,7 +105,7 @@ class PerformanceReady: UIViewController {
                 self.view?.window?.rootViewController = ViewController()
                 self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
             }
-        }//exit performance screen when pinched
+        }
     }
     
 }

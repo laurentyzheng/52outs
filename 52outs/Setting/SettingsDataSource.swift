@@ -9,10 +9,7 @@ import UIKit
 
 class SettingsCell: UITableViewCell {
     
-    // MARK: - Properties
-    
     // MARK: - Init
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
@@ -35,7 +32,6 @@ enum SettingsSection: Int, CaseIterable, CustomStringConvertible {
             return "Performance"
         }
     }
-    
 }
 
 enum ScreenOptions: Int, CaseIterable, CustomStringConvertible {
@@ -61,13 +57,11 @@ enum ScreenOptions: Int, CaseIterable, CustomStringConvertible {
                 break
         }
     }
-    
 }
 
 enum PerformanceOptions: Int, CaseIterable, CustomStringConvertible {
     case ChangeValue
 
-    
     var description: String {
         switch  self {
         case .ChangeValue:
