@@ -1,6 +1,6 @@
 # 52outs
 
-**This is provides an out system for magician's everyday-performance.**
+**The application serves as an out system for magician's everyday-performance.**
 
 ## Trick Discription
 
