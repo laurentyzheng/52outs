@@ -7,12 +7,6 @@
 The Magician shows a turned off phone and allows the spectator to think of *any* card in the deck, while holding this imaginary card at the finger tips.
 Once the spectator taps the phone, a folded card appears in the phone. Unfolding it reveals the thought of playing card!
 
-### Getting Started
-
-To run the app, make sure to have installed the latest version of [XCode](https://developer.apple.com/xcode/) on a Mac device/Mac Virtual Environment. 
-Clone the repo with the following url: 
-
-```https://github.com/laurentyzheng/Magic-IOS-App.git```
 
 ### Specifications
 
