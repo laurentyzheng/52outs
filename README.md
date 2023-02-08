@@ -12,7 +12,3 @@ Once the spectator taps the phone, a folded card appears in the phone. Unfolding
 
 The app works best with larger phones in order to fit the dimensions of a physical playing card, which is `57mm X 89mm`. 
 Ipads would also work, but it is not recommended both for the performance aspects and the visual aspects.
-
-#### Follow *@laurentzhg* for more magic content! ####
-
-> HAPPY PERFORMING! 8-)
